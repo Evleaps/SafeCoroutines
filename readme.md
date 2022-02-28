@@ -1,8 +1,10 @@
-# Coroutines
+# SafeCoroutines
 
-## Введение
+[Readme on russian | Readme на русском](readme_ru.md)
 
-В проекте используются ext функции CoroutinesUtils.kt. В этом файле аналоги функций launch и
+## Introduction
+
+The project uses the ext functions of CoroutinesUtils.kt. In this file, analogues of the functions launch and
 withContext
 
 - launch(Dispatchers.IO) -> launchIO
@@ -10,51 +12,50 @@ withContext
 - withContext(Dispatchers.IO) -> withIO
 - withContext(Dispatchers.Main) -> withMain
 
-Вызовы стандартной библиотеки запрещены кастомным правилами Detekt:
+Calls to the standard library are recommended to be prohibited by custom rules Detekt:
 
 - NeedToUseCustomWithContextRule
 - NeedToUseCustomLaunchRule
 
-## Почему необходимо использовать свои ext?
+## Why is it necessary to use these extensions?
 
-Потому что стандартный подход не обязывает нас обрабатывать ошибки, более того, обработка ошибок в
-котлине сложна из-за своей неочевидности. Блок try-catch не перехватит ошибку в IO и приложение все равно
-упадет, а использование CoroutineExceptionHandler на весь класс приводит к тому, что ошибка в одной
-курутине может поломать все остальные корутины в скоупе. Чтобы этого избежать нужно либо создавать
-разные скоупы, либо разные инстансы CoroutineExceptionHandler и это большое количество подходов не
-гарантирует единого подхода к их обработке.
+Because the standard approach does not oblige us to handle errors, moreover, error handling in
+Kotlin is difficult because of its non-obviousness. The try-catch block won't catch the error in IO and the application doesn't care
+will fall, and the use of CoroutineExceptionHandler on the whole class leads to the fact that an error in one
+curutin can break all other coroutines in the scope. To avoid this, you must either create
+different scopes, or different instances of CoroutineExceptionHandler and this large number of approaches do not
+guarantees a unified approach to their processing
 
-## Проблемы
+## Problems
 
-1. Контракт не обязывает обрабатывать факт ошибки в корутине, значит кто-то может зря принебречь обработкой
-2. try-catch перехватывает не все ошибки и это приводит к крашам
-3. Нужно передавать в конструктор параметры потока и обработчика ошибок, это усложняет читабельность
-   кода
-4. Нет единого подхода к организации асинхронной работы
-5. Ошибка придет в рандомном потоке, следовательно, изменения UI приведут к крашу
-6. Использование единого CoroutineExceptionHandler на весь класс или в MainClass прервет операции в
-   этом скоупе
+1. The contract does not oblige to process the fact of an error in the coroutine, which means that someone can neglect processing in vain
+2. try-catch does not catch all errors and this leads to crashes
+3. It is necessary to pass the parameters of the stream and the error handler to the constructor, this complicates readability
+   code
+4. There is no single approach to organizing asynchronous work
+5. The error will come in a random thread, therefore, UI changes will lead to a crash
+6. Using a single CoroutineExceptionHandler for the entire class or in MainClass will abort operations in
+   this scope
 
-## Решение
+## Solution
 
-1. Мы используем свои экстеншены которые внутри себя создают coroutineExceptionHandler - **
-   следовательно любая корутина обязана обрабатывать факт ошибки, даже если на нее реагировать не нужно**
-2. Экстеншены похожи на subscribeBy - **знакомый синтаксис из RxJava понятнее**
-3. Не нужно передавать ничего в конструктор - **чище и проще код**
-4. Единый подход - **минимизация ошибок из за неправильной обработки или ее отсутствия**
-5. В onError ошибка придет всегда в Main потоке - **значит можно обновлять UI**
-6. Каждая ошибка изолирована - **значит мы не прервем важную операцию выполняющуюся параллельно в
-   том же скоупе**
+1. We use our own extensions which internally create a coroutineExceptionHandler - **therefore, any coroutine must handle the fact of an error, even if it does not need to be reacted to**
+2. Extensions are similar to subscribeBy - **Familiar syntax from RxJava is clearer**
+3. No need to pass anything to the constructor - **cleaner and simpler code**
+4. A unified approach - **minimization of errors due to incorrect processing or its absence**
+5. In onError, the error will always come in the Main thread - ** so you can update the UI **
+6. Each error is isolated - **means we will not interrupt an important operation running in parallel in
+   same scope**
 
-## Примеры
+## Samples
 
-**Было**
+**Before | Old**
 
 ```kotlin
 class MyViewModel {
 
     private val myExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        withContext(Dispatchers.Main) { // так как нельзя обновлять UI в IO потоке
+        withContext(Dispatchers.Main) { // because you cannot update the UI in the IO thread
             view.showError()
         }
     }
@@ -67,7 +68,7 @@ class MyViewModel {
 
             if (campaign is FavoritesCashbackCampaign) {
                 val percent = loyaltyProgramInteractor.getFavoritesCashbackPercentage()
-                withContext(Dispatchers.Main) { // так как нельзя обновлять UI в IO потоке
+                withContext(Dispatchers.Main) { // because you cannot update the UI in the IO thread
                     view.setLikeCashbackPercent(percent)
                 }
             }
@@ -76,7 +77,7 @@ class MyViewModel {
 }
 ```
 
-**Стало**
+**After | new**
 
 ```kotlin
 class MyViewModel {
@@ -90,7 +91,7 @@ class MyViewModel {
 
                 if (campaign is FavoritesCashbackCampaign) {
                     val percent = loyaltyProgramInteractor.getFavoritesCashbackPercentage()
-                    withMain { // так как нельзя обновлять UI в IO потоке
+                    withMain { // because you cannot update the UI in the IO thread
                         view.setLikeCashbackPercent(percent)
                     }
                 }
@@ -105,28 +106,23 @@ class MyViewModel {
 
 ```
 
-## Тестирование
+## Testing
 
-Пример с тестами лежит тут: https://gitlab.city-srv.ru/r.aimaletdinov/coroutine_exception_ext
+If you need to test coroutines with stream redefinition, as we did for Rx, then there is no need for coroutines in such
+a file, because we can use [kotlinx-coroutines-test](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/) which overrides threads for testing.
 
-Если потребуется протестировать корутины с переопределением потока, так как это мы делали для Rx в
-AppSchedulers, то в корутинах в подобном файле нет необходимости, так
-как [есть либа](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/) выполняющая
-роль переопределения потоков для тестирования.
-
-Информацию в основном я черпал
-из [этой статьи на Medium](https://medium.com/swlh/unit-testing-with-kotlin-coroutines-the-android-way-19289838d257)
+I mainly based on information from [this article on Medium](https://medium.com/swlh/unit-testing-with-kotlin-coroutines-the-android-way-19289838d257)
 .
 
-## Как это работает
+## How it works?
 
-**PS: Сначала добавить зависимость**
+**PS: Firstly need to add dependency**
 
 ```groovy
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
 ```
 
-**В тест файле**
+**Test**
 
 ```kotlin
 @Before
@@ -143,9 +139,9 @@ fun tearDown() {
 
 ```
 
-## Примеры тестирования
+## Test samples
 
-**Тестируемые функции**
+**ViewModel** or something like that
 
 ```kotlin
 class LikeViewModel : CoroutineScope {
@@ -190,7 +186,7 @@ class LikeViewModel : CoroutineScope {
 }
 ```
 
-**Тесты**
+**Tests**
 
 ```kotlin
 
