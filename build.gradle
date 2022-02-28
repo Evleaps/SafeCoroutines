@@ -13,4 +13,5 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
+    implementation "io.gitlab.arturbosch.detekt:detekt-api:1.17.1"
 }

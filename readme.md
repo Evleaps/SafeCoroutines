@@ -14,8 +14,8 @@ withContext
 
 Calls to the standard library are recommended to be prohibited by custom rules Detekt:
 
-- NeedToUseCustomWithContextRule
-- NeedToUseCustomLaunchRule
+- [NeedToUseCustomWithContextRule](src/main/java/detekt/NeedToUseCustomWithContextRule.kt)
+- [NeedToUseCustomLaunchRule](src/main/java/detekt/NeedToUseCustomLaunchRule.kt)
 
 ## Why is it necessary to use these extensions?
 
@@ -105,6 +105,19 @@ class MyViewModel {
 }
 
 ```
+
+## Detekt custom rules
+
+In order for all team members to use a unified approach to creating coroutines and error handling, 
+I strongly advise you to include these rules in the list of Detekt custom rules. 
+
+If your project have not Detekt: 
+- Detekt is a static analysis tool that can automate your routine work as a code reviewer.
+- [GitHub](https://github.com/detekt/detekt)
+- [Site](https://detekt.dev/)
+- [How implement custom rules (Russian, please, use google translate)](https://habr.com/en/company/citymobil/blog/565402/)
+
+Just insert the 2 rules you saw above in `DetektCustomRuleSetProvider` and the rules will work for you.
 
 ## Testing
 
