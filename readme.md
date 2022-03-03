@@ -17,6 +17,14 @@ Calls to the standard library are recommended to be prohibited by custom rules D
 - [NeedToUseCustomWithContextRule](src/main/java/detekt/NeedToUseCustomWithContextRule.kt)
 - [NeedToUseCustomLaunchRule](src/main/java/detekt/NeedToUseCustomLaunchRule.kt)
 
+## Install
+
+Just add dependency 
+
+```groovy
+    implementation "TODO"
+```
+
 ## Why is it necessary to use these extensions?
 
 Because the standard approach does not oblige us to handle errors, moreover, error handling in
@@ -254,7 +262,7 @@ class LikeViewModelTest {
 }
 ```
 
-# Don't want to use the experimental API
+## Don't want to use the experimental API
 
 If you don't want to use the experimental api from kotlinx-coroutines-test you can use the standard approach
 of overriding the Dispatcher and injection.
