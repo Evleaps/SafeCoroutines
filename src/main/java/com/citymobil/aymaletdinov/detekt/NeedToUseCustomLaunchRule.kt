@@ -45,7 +45,7 @@ internal class NeedToUseCustomLaunchRule(config: Config) : Rule(config) {
                         issue = issue,
                         entity = Entity.from(function, offset),
                         message = "The function ${function.name} using Coroutines. " +
-                            "You must use a custom launch ext from SafeCoroutinesExt instead \".launch { smth }\" here."
+                                "You must use a custom launch ext from SafeCoroutinesExt instead \".launch { smth }\" here."
                     )
                 )
             }

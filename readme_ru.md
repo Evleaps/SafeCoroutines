@@ -254,3 +254,34 @@ class LikeViewModelTest {
     }
 }
 ```
+
+# Не хочу использовать экспериментальное API
+
+Если вы не хотите использовать экспериментальный API из
+kotlinx-coroutines-test, вы можете использовать стандартный
+подход переопределения Dispatcher прокидывая в каждый вызов launch, 
+используя Inject для доставки зависимостей в классы.
+
+```kotlin
+inline fun CoroutineScope.launchSafe(
+   crossinline safeAction: suspend () -> Unit,
+   crossinline onError: (Throwable) -> Unit,
+   dispatcher: CoroutineDispatcher, // <-- you must provide some Dispatcher manually
+   errorDispatcher: CoroutineDispatcher = Dispatchers.Main
+): Job {
+   val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+      launch(errorDispatcher) {
+         onError.invoke(throwable)
+      }
+   }
+
+   return this.launch(exceptionHandler + dispatcher) {
+      safeAction.invoke()
+   }
+}
+```
+
+Подробные материалы этого метода собраны здесь:
+- [Google coroutines-best-practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Medium](https://towardsdev.com/how-to-inject-the-coroutines-dispatchers-into-your-testable-code-5c21d393a99a)
+- [GitHub](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test)

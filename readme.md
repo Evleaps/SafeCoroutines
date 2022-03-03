@@ -253,3 +253,32 @@ class LikeViewModelTest {
     }
 }
 ```
+
+# Don't want to use the experimental API
+
+If you don't want to use the experimental api from kotlinx-coroutines-test you can use the standard approach
+of overriding the Dispatcher and injection.
+
+```kotlin
+inline fun CoroutineScope.launchSafe(
+   crossinline safeAction: suspend () -> Unit,
+   crossinline onError: (Throwable) -> Unit,
+   dispatcher: CoroutineDispatcher, // <-- you must provide some Dispatcher manually
+   errorDispatcher: CoroutineDispatcher = Dispatchers.Main
+): Job {
+   val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+      launch(errorDispatcher) {
+         onError.invoke(throwable)
+      }
+   }
+
+   return this.launch(exceptionHandler + dispatcher) {
+      safeAction.invoke()
+   }
+}
+```
+
+Detailed materials of this method are collected here:
+- [Google coroutines-best-practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Medium](https://towardsdev.com/how-to-inject-the-coroutines-dispatchers-into-your-testable-code-5c21d393a99a)
+- [GitHub](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test)
