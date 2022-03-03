@@ -1,4 +1,4 @@
-package detekt
+package com.citymobil.aymaletdinov.detekt
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -12,21 +12,22 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Created by Aymaletdinov Roman
  *
- * This rule forbids the use of standard Scope.launch(vararg).
+ * This rule forbids the use of standard Scope.withContext(Dispatcher).
  * To use it, you must add the Detekt static analyzer to your project
  *
  * @see https://github.com/detekt/detekt
  */
-internal class NeedToUseCustomLaunchRule(config: Config) : Rule(config) {
+internal class NeedToUseCustomWithContextRule(config: Config) : Rule(config) {
 
     companion object {
 
-        private const val TRIGGER_VALUE = ".launch {"
+        private const val TRIGGER_VALUE = "withContext"
     }
 
     override val issue = Issue(
-        id = "NeedToUseCustomLaunch",
-        description = "Must use a custom launch ext from SafeCoroutinesExt instead \".launch { smth }\"",
+        id = "NeedToUseCustomWithContextRule",
+        description = "Must use a custom withIO or withMain " +
+            "function from SafeCoroutinesExt instead \"withContext(Dispatchers.SMTH, block)\"",
         severity = Severity.CodeSmell,
         debt = Debt.FIVE_MINS
     )
@@ -45,7 +46,8 @@ internal class NeedToUseCustomLaunchRule(config: Config) : Rule(config) {
                         issue = issue,
                         entity = Entity.from(function, offset),
                         message = "The function ${function.name} using Coroutines. " +
-                            "You must use a custom launch ext from SafeCoroutinesExt instead \".launch { smth }\" here."
+                            "You must use a custom withSMTH ext from SafeCoroutinesExt " +
+                            "instead \"withContext(Dispatchers.SMTH, block)\" here."
                     )
                 )
             }

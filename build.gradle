@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
 }
 
 group 'com.citymobil.safecoroutines'
@@ -12,6 +12,15 @@ repositories {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
-    implementation "io.gitlab.arturbosch.detekt:detekt-api:1.17.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+    implementation "io.gitlab.arturbosch.detekt:detekt-api:1.19.0"
+    implementation 'junit:junit:4.13.2'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
+    testImplementation 'org.mockito:mockito-inline:4.3.1'
+}
+
+test {
+    useJUnitPlatform()
 }
