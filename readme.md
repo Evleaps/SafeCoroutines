@@ -156,7 +156,7 @@ fun tearDown() {
     Dispatchers.resetMain() // reset the main dispatcher to the original Main dispatcher
 }
 
-// тесты
+// tests
 
 ```
 

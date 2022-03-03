@@ -15,6 +15,13 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.mockito.Mockito.*
 import kotlin.system.measureTimeMillis
 
+/**
+ * If you don't want to use ExperimentalApi use launchSafe.
+ * @see {SafeCoroutinesExt#launchSafe}
+ *
+ * Note: If you are using IntelliJ IDEA you must change the IntelliJ settings:
+ * Preferences -> Build, Execution, Deployment -> Gradle -> 'Run Tests Using' from 'Gradle (default)' to 'IntelliJ IDEA'.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class LikeViewModelTest {
 
