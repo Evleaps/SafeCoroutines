@@ -105,7 +105,7 @@ class MyViewModel {
                 }
             },
             onError = {
-                // не нужно делать withMain так как ошибка всегда в Main потоке
+                // no need to do withMain as the error is always in the Main thread
                 view.showError()
             }
         )
