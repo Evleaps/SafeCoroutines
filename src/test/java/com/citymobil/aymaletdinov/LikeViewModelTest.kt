@@ -18,11 +18,9 @@ import kotlin.system.measureTimeMillis
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class LikeViewModelTest {
 
-    val testDispatcher = StandardTestDispatcher()
-
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
+        Dispatchers.setMain(StandardTestDispatcher())
     }
 
     @After
