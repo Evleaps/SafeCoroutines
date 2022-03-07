@@ -15,6 +15,25 @@ withContext
 - NeedToUseCustomWithContextRule
 - NeedToUseCustomLaunchRule
 
+## Установка
+
+[![](https://jitpack.io/v/Evleaps/SafeCoroutines.svg)](https://jitpack.io/#Evleaps/SafeCoroutines)
+
+Just add dependency
+
+```groovy
+    allprojects {
+        repositories {
+            // ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
+
+    dependencies {
+        implementation 'com.github.Evleaps:SafeCoroutines:'
+    }
+```
+
 ## Почему необходимо использовать свои ext?
 
 Потому что стандартный подход не обязывает нас обрабатывать ошибки, более того, обработка ошибок в

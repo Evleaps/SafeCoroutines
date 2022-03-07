@@ -19,10 +19,21 @@ Calls to the standard library are recommended to be prohibited by custom rules D
 
 ## Install
 
-Just add dependency 
+[![](https://jitpack.io/v/Evleaps/SafeCoroutines.svg)](https://jitpack.io/#Evleaps/SafeCoroutines)
+
+Just add dependency
 
 ```groovy
-    implementation "TODO"
+    allprojects {
+        repositories {
+            // ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
+
+    dependencies {
+        implementation 'com.github.Evleaps:SafeCoroutines:$version'
+    }
 ```
 
 ## Why is it necessary to use these extensions?

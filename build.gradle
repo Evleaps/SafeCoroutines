@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id 'maven-publish'
 }
 
 apply from: "$rootDir/dependencies.gradle"
@@ -9,6 +10,18 @@ version '1.0.0-RC'
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.citymobil.aymaletdinov.safecoroutines' as Publication
+            artifactId = 'SafeCoroutines' as Publication
+            version = '1.0.0-rc' as Publication
+
+            from components.java
+        }
+    }
 }
 
 dependencies {
