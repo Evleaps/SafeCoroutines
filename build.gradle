@@ -5,24 +5,31 @@ plugins {
 }
 
 apply from: "$rootDir/dependencies.gradle"
+apply plugin: 'maven-publish'
 
 group 'com.citymobil.safecoroutines'
-version '1.0.2-RC'
+version '1.0.3-RC'
 
 repositories {
     mavenCentral()
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            groupId = 'com.citymobil.aymaletdinov.safecoroutines' as Publication
-            artifactId = 'SafeCoroutines' as Publication
-            version = '1.0.2-rc' as Publication
-
+        maven(MavenPublication) {
             from components.java
         }
     }
+}
+
+wrapper {
+    gradleVersion = "7.3.3"
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 dependencies {
