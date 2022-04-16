@@ -36,7 +36,7 @@ inline fun CoroutineScope.launchMain(
     crossinline onError: (Throwable) -> Unit,
     errorDispatcher: CoroutineDispatcher = Dispatchers.Main
 ): Job {
-    val exceptionHandler = CoroutineExceptionHandler { x, throwable ->
+    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         launch(errorDispatcher) {
             onError.invoke(throwable)
         }

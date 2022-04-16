@@ -17,7 +17,7 @@ def static_analysis = [:]
 static_analysis.detekt_api = "io.gitlab.arturbosch.detekt:detekt-api:$versions.detekt" as Object
 deps.static_analysis = static_analysis
 
-def test =[:]
+def test = [:]
 test.junit = "junit:junit:$versions.junit" as Object
 test.jupiter = "org.junit.jupiter:junit-jupiter:$versions.jupiter" as Object
 test.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin" as Object
