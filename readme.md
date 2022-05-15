@@ -220,9 +220,13 @@ class LikeViewModel : CoroutineScope {
 
 **Tests**
 
+More test in this repo:[Link](https://github.com/Evleaps/SafeCoroutines/blob/master/src/test/java/com/citymobil/aymaletdinov/LikeViewModelTest.kt)
+
+More information about coroutine testing you can read [hire](https://developer.android.com/kotlin/coroutines/test).
+
 ```kotlin
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi::class
 class LikeViewModelTest {
 
     @Before
@@ -236,7 +240,7 @@ class LikeViewModelTest {
     }
 
     @Test
-    fun `WHEN call fun in IO THEN onSuccess called`() = runBlocking {
+    fun `WHEN call fun in IO THEN onSuccess called`() = runTest {
         val viewModel: LikeViewModel = spy(LikeViewModel())
 
         val executionTime = measureTimeMillis {
@@ -260,7 +264,7 @@ class LikeViewModelTest {
     }
 
     @Test
-    fun `WHEN checkThatFlagTrue called THEN it must return true`() = runBlocking {
+    fun `WHEN checkThatFlagTrue called THEN it must return true`() = runTest {
         val mainViewModel = LikeViewModel()
 
         val executionTime = measureTimeMillis {
