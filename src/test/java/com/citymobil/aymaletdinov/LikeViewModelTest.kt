@@ -7,10 +7,9 @@ import kotlinx.coroutines.test.*
 import launchIO
 import launchMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.mockito.Mockito.*
 import kotlin.system.measureTimeMillis
 
@@ -107,7 +106,7 @@ internal class LikeViewModelTest {
 
         val executionTime = measureTimeMillis {
             val isTrue = mainViewModel.checkThatFlagTrue()
-            assertTrue(isTrue)
+            assert(isTrue)
         }
 
         print("Execution Time: $executionTime")

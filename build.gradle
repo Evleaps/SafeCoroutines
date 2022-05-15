@@ -45,7 +45,6 @@ dependencies {
 
     testImplementation(
             deps.test.junit,
-            deps.test.jupiter,
             deps.test.coroutines,
             deps.test.mokito
     )

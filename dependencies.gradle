@@ -1,16 +1,15 @@
 ext.versions = [:]
 
-versions.kotlin = '1.6.0'
-versions.detekt = '1.19.0'
+versions.kotlin_coroutines = '1.6.1'
+versions.detekt = '1.20.0'
 versions.junit = '4.13.2'
-versions.jupiter = '5.8.2'
 versions.mokito = '4.3.1'
 
 ext.deps = [:]
 
 def ktx = [:]
 ktx.stdlib = "org.jetbrains.kotlin:kotlin-stdlib"
-ktx.coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlin" as Object
+ktx.coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlin_coroutines" as Object
 deps.ktx = ktx
 
 def static_analysis = [:]
@@ -19,8 +18,7 @@ deps.static_analysis = static_analysis
 
 def test = [:]
 test.junit = "junit:junit:$versions.junit" as Object
-test.jupiter = "org.junit.jupiter:junit-jupiter:$versions.jupiter" as Object
-test.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin" as Object
+test.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines" as Object
 test.mokito = "org.mockito:mockito-inline:$versions.mokito" as Object
 deps.test = test
 
