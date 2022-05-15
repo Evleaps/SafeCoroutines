@@ -3,14 +3,13 @@ package com.citymobil.aymaletdinov
 import com.citymobil.aymaletdinov.example.LikeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.*
+import launchIO
+import launchMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.mockito.Mockito.*
 import kotlin.system.measureTimeMillis
@@ -22,7 +21,7 @@ import kotlin.system.measureTimeMillis
  * Note: If you are using IntelliJ IDEA you must change the IntelliJ settings:
  * Preferences -> Build, Execution, Deployment -> Gradle -> 'Run Tests Using' from 'Gradle (default)' to 'IntelliJ IDEA'.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 internal class LikeViewModelTest {
 
     @Before
@@ -36,7 +35,7 @@ internal class LikeViewModelTest {
     }
 
     @Test
-    fun `WHEN call fun in IO THEN onSuccess called`() = runBlocking {
+    fun `WHEN call fun in IO THEN onSuccess called`() = runTest {
         val viewModel: LikeViewModel = spy(LikeViewModel())
 
         val executionTime = measureTimeMillis {
@@ -45,6 +44,49 @@ internal class LikeViewModelTest {
         }
 
         print("runSmthInIO: Execution Time: $executionTime")
+    }
+
+    @Test
+    fun `WHEN fill repository in different coroutines with IO THEN repository contain all`() = runTest {
+        val repository = mutableListOf<String>()
+
+        launchIO(
+            safeAction = {
+                repository.add("Joshua")
+            },
+            onError = { /* nothing */ }
+        )
+
+        launchIO(
+            safeAction = {
+                repository.add("Roman")
+            },
+            onError = { /* nothing */ }
+        )
+
+        assertEquals(listOf("Joshua", "Roman"), repository)
+    }
+
+    @Test
+    fun `WHEN fill repository in different coroutines with Main THEN repository contain all`() = runTest {
+        val repository = mutableListOf<String>()
+
+        launchMain(
+            safeAction = {
+                repository.add("Joshua")
+            },
+            onError = { /* nothing */ }
+        )
+
+        launchMain(
+            safeAction = {
+                repository.add("Roman")
+            },
+            onError = { /* nothing */ }
+        )
+
+        advanceUntilIdle() // https://developer.android.com/kotlin/coroutines/test
+        assertEquals(listOf("Joshua", "Roman"), repository)
     }
 
     @Test
@@ -60,7 +102,7 @@ internal class LikeViewModelTest {
     }
 
     @Test
-    fun `WHEN checkThatFlagTrue called THEN it must return true`() = runBlocking {
+    fun `WHEN checkThatFlagTrue called THEN it must return true`() = runTest {
         val mainViewModel = LikeViewModel()
 
         val executionTime = measureTimeMillis {

@@ -37,16 +37,16 @@ wrapper {
 }
 
 dependencies {
-    implementation deps.ktx.stdlib
-    implementation deps.ktx.coroutines_core
-    implementation deps.static_analysis.detekt_api
+    implementation(
+            deps.ktx.stdlib,
+            deps.ktx.coroutines_core,
+            deps.static_analysis.detekt_api
+    )
 
-    testImplementation deps.test.junit
-    testImplementation deps.test.jupiter
-    testImplementation deps.test.coroutines
-    testImplementation deps.test.mokito
-}
-
-test {
-    useJUnitPlatform()
+    testImplementation(
+            deps.test.junit,
+            deps.test.jupiter,
+            deps.test.coroutines,
+            deps.test.mokito
+    )
 }
