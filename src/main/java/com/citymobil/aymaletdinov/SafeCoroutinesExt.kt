@@ -1,8 +1,9 @@
+import com.citymobil.aymaletdinov.LaunchSafeBuilder
 import kotlinx.coroutines.*
 
 inline fun CoroutineScope.launchIO(
     crossinline safeAction: suspend () -> Unit,
-    crossinline onError: (Throwable) -> Unit,
+    crossinline onError: suspend (Throwable) -> Unit,
     errorDispatcher: CoroutineDispatcher = Dispatchers.Main
 ): Job {
     val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -18,7 +19,7 @@ inline fun CoroutineScope.launchIO(
 
 inline fun CoroutineScope.launchIO(
     crossinline safeAction: suspend () -> Unit,
-    crossinline onError: (Throwable) -> Unit
+    crossinline onError: suspend (Throwable) -> Unit
 ): Job {
     val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         launch(Dispatchers.Main) {
@@ -33,7 +34,7 @@ inline fun CoroutineScope.launchIO(
 
 inline fun CoroutineScope.launchMain(
     crossinline safeAction: suspend () -> Unit,
-    crossinline onError: (Throwable) -> Unit,
+    crossinline onError: suspend (Throwable) -> Unit,
     errorDispatcher: CoroutineDispatcher = Dispatchers.Main
 ): Job {
     val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -49,7 +50,7 @@ inline fun CoroutineScope.launchMain(
 
 inline fun CoroutineScope.launchMain(
     crossinline safeAction: suspend () -> Unit,
-    crossinline onError: (Throwable) -> Unit
+    crossinline onError: suspend (Throwable) -> Unit
 ): Job {
     val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         launch(Dispatchers.Main) {
@@ -73,7 +74,7 @@ inline fun CoroutineScope.launchMain(
  */
 inline fun CoroutineScope.launchSafe(
     crossinline safeAction: suspend () -> Unit,
-    crossinline onError: (Throwable) -> Unit,
+    crossinline onError: suspend (Throwable) -> Unit,
     dispatcher: CoroutineDispatcher,
     errorDispatcher: CoroutineDispatcher = Dispatchers.Main,
 ): Job {
@@ -87,6 +88,8 @@ inline fun CoroutineScope.launchSafe(
         safeAction.invoke()
     }
 }
+
+fun CoroutineScope.launchBuilder(): LaunchSafeBuilder = LaunchSafeBuilder(this)
 
 @Suppress("NeedToUseCustomWithContextRule")
 suspend inline fun <T> withIO(noinline block: suspend CoroutineScope.() -> T): T {

@@ -1,6 +1,8 @@
 package com.citymobil.aymaletdinov
 
 import com.citymobil.aymaletdinov.example.LikeViewModel
+import io.mockk.spyk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -10,7 +12,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.*
 import kotlin.system.measureTimeMillis
 
 /**
@@ -35,11 +36,11 @@ internal class LikeViewModelTest {
 
     @Test
     fun `WHEN call fun in IO THEN onSuccess called`() = runTest {
-        val viewModel: LikeViewModel = spy(LikeViewModel())
+        val viewModel: LikeViewModel = spyk(LikeViewModel())
 
         val executionTime = measureTimeMillis {
             viewModel.runSmthInIO().join()
-            verify(viewModel, times(1)).onSuccess()
+            verify { viewModel.onSuccess() }
         }
 
         print("runSmthInIO: Execution Time: $executionTime")
@@ -90,15 +91,40 @@ internal class LikeViewModelTest {
 
     @Test
     fun `WHEN call fun in Main THEN onSuccess called`() = runTest {
-        val viewModel: LikeViewModel = spy(LikeViewModel())
+        val viewModel: LikeViewModel = spyk(LikeViewModel())
 
         val executionTime = measureTimeMillis {
             viewModel.runSmthInMain().join()
-            verify(viewModel, times(1)).onSuccess()
+            verify { viewModel.onSuccess() }
         }
 
         print("Execution Time: $executionTime")
     }
+
+    @Test
+    fun `WHEN call launchBuilder in IO THEN onSuccess called`() = runTest {
+        val viewModel: LikeViewModel = spyk(LikeViewModel())
+
+        val executionTime = measureTimeMillis {
+            viewModel.runLaunchBuilder(isNeedError = false).join()
+            verify { viewModel.onSuccess() }
+        }
+
+        print("Execution Time: $executionTime")
+    }
+
+    @Test
+    fun `WHEN call launchBuilder in IO with error THEN onError called`() = runTest {
+        val viewModel: LikeViewModel = spyk<LikeViewModel>()
+
+        val executionTime = measureTimeMillis {
+            viewModel.runLaunchBuilder(isNeedError = true).join()
+            verify { viewModel.onError(any()) }
+        }
+
+        print("Execution Time: $executionTime")
+    }
+
 
     @Test
     fun `WHEN checkThatFlagTrue called THEN it must return true`() = runTest {

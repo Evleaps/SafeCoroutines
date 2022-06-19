@@ -8,7 +8,7 @@ apply from: "$rootDir/dependencies.gradle"
 apply plugin: 'maven-publish'
 
 group 'com.citymobil.safecoroutines'
-version '1.0.4-RC'
+version '1.0.5-RC'
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ publishing {
         maven(MavenPublication) {
             groupId = "com.citymobil.aymaletdinov"
             artifactId = "safecoroutines"
-            version '1.0.4-RC'
+            version '1.0.5-RC'
 
             from components.java
         }
@@ -46,6 +46,6 @@ dependencies {
     testImplementation(
             deps.test.junit,
             deps.test.coroutines,
-            deps.test.mokito
+            deps.test.mockk
     )
 }

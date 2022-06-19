@@ -1,9 +1,9 @@
 ext.versions = [:]
 
-versions.kotlin_coroutines = '1.6.1'
+versions.kotlin_coroutines = '1.6.2'
 versions.detekt = '1.20.0'
 versions.junit = '4.13.2'
-versions.mokito = '4.3.1'
+versions.mockk = '1.12.4'
 
 ext.deps = [:]
 
@@ -19,6 +19,5 @@ deps.static_analysis = static_analysis
 def test = [:]
 test.junit = "junit:junit:$versions.junit" as Object
 test.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines" as Object
-test.mokito = "org.mockito:mockito-inline:$versions.mokito" as Object
+test.mockk = "io.mockk:mockk:$versions.mockk" as Object
 deps.test = test
-

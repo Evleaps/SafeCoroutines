@@ -151,7 +151,7 @@ I mainly based on information from [this article on Medium](https://medium.com/s
 **PS: Firstly need to add dependency**
 
 ```groovy
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.version'
 ```
 
 **Test**
